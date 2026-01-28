@@ -85,10 +85,12 @@
             <span class="author-block">
               <a href="mailto:xiong@sues.edu.cn">Yu-Jie Xiong</a><sup>1</sup>,</span>
             <span class="author-block">
-              <a href="mailto:cmxia@sues.edu.cn">Chun-Ming Xia</a><sup>1</sup>,</span>
-            <span class="author-block">
               <a href="mailto:m325123603@sues.edu.cn">Jia-Chen Zhang</a><sup>1</sup>,</span>
             <span class="author-block">
+              <a href="mailto:cmxia@sues.edu.cn">Chun-Ming Xia</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="mailto:cmxia@sues.edu.cn">Xihe Qiu</a><sup>1</sup>,</span>
+            <span class="author-block">              
               <a href="mailto:hjzhan@cee.ecnu.edu.cn">Hong-Jian Zhan</a><sup>2</sup></span>
           </div>
 
@@ -234,13 +236,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            The emergence of 3D Gaussian Splatting (3DGS) has significantly advanced novel view synthesis through explicit scene representation, enabling real-time photorealistic rendering. However, existing approaches manifest two critical limitations in complex scenarios: (1) Over-reconstruction occurs when persistent large Gaussians cannot meet adaptive splitting thresholds during density control; (2) Over-densification of Gaussians occurs in regions with aligned gradient aggregation, leading to redundant component proliferation.
-          </p>
-          <p>
-            We present Gradient-Direction-Aware Gaussian Splatting (GDAGS), a gradient-direction-aware adaptive density control framework to address these challenges. Our key innovations: the gradient coherence ratio (GCR), computed through normalized gradient vector norms, which explicitly discriminates Gaussians with concordant versus conflicting gradient directions; and a nonlinear dynamic weighting mechanism leverages the GCR to enable gradient-direction-aware density control.
-          </p>
-          <p>
-            Comprehensive evaluations across diverse real-world benchmarks demonstrate that GDAGS achieves superior rendering quality while effectively mitigating over-reconstruction, suppressing over-densification, and constructing compact scene representations with 50% reduced memory consumption through optimized Gaussians utilization.
+            The emergence of 3D Gaussian Splatting (3DGS) has significantly advanced Novel View Synthesis (NVS) through explicit scene representation, enabling real-time photorealistic rendering. However, existing approaches manifest two critical limitations in complex scenarios: (1) Over-reconstruction occurs when persistent large Gaussians cannot meet adaptive splitting thresholds during density control. This is exacerbated by conflicting gradient directions that prevent effective splitting of these Gaussians; (2) Over-densification of Gaussians occurs in regions with aligned gradient aggregation, leading to redundant component proliferation. This redundancy significantly increases memory overhead due to unnecessary data retention. We present Gradient-Direction-Aware Gaussian Splatting (GDAGS) to address these challenges. Our key innovations: the Gradient Coherence Ratio (GCR), computed through normalized gradient vector norms, which explicitly discriminates Gaussians with concordant versus conflicting gradient directions; and a nonlinear dynamic weighting mechanism leverages the GCR to enable gradient-direction-aware density control. Specifically, GDAGS prioritizes conflicting-gradient Gaussians during splitting operations to enhance geometric details while suppressing redundant concordant-direction Gaussians. Conversely, in cloning processes, GDAGS promotes concordant-direction Gaussian densification for structural completion while preventing conflicting-direction Gaussian overpopulation. Comprehensive evaluations across diverse real-world benchmarks demonstrate that GDAGS achieves superior rendering quality while effectively mitigating over-reconstruction, suppressing over-densification, and constructing compact scene representations.
           </p>
         </div>
       </div>
@@ -282,7 +278,11 @@
                class="interpolation-image"
                alt="GDAGS pipeline"/>
           <p>
-            Figure 2: The pipeline of GDAGS. First, for each Gaussian, GDAGS computes the GCR to quantify the directional coherence of its subgradients. Subsequently, this GCR metric is mapped through a nonlinear dynamic weighting function to generate per-Gaussian gradient weights, which modulate the view-space positional gradient magnitudes and produce a refined decision metric.
+            The pipeline of GDAGS. First, for each Gaussian, GDAGS computes the GCR to quantify
+the directional coherence of its subgradients. Subsequently, this GCR metric is mapped through a
+nonlinear dynamic weighting function to generate per-Gaussian gradient weights, which modulate
+the view-space positional gradient magnitudes and produce a refined decision metric. Finally, this
+decision metric is compared against a predefined threshold to dynamically regulate densification.
           </p>
         </div>
       </div>
@@ -317,18 +317,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td>Plenoxels [3]</td><td>0.626</td><td>23.08</td><td>0.463</td><td>2.1GB</td><td>0.719</td><td>21.08</td><td>0.379</td><td>2.3GB</td><td>0.795</td><td>23.06</td><td>0.510</td><td>2.7GB</td></tr>
-              <tr><td>INGP [8]</td><td>0.671</td><td>25.30</td><td>0.371</td><td>13MB</td><td>0.723</td><td>21.72</td><td>0.330</td><td>13MB</td><td>0.797</td><td>26.42</td><td>0.423</td><td>13MB</td></tr>
-              <tr><td>Mip-NeRF360 [9]</td><td>0.792</td><td>27.69</td><td>0.237</td><td>85MB</td><td>0.759</td><td>22.22</td><td>0.257</td><td>85MB</td><td>0.901</td><td>29.40</td><td>0.425</td><td>85MB</td></tr>
-              <tr><td>3DGS [4]</td><td>0.815</td><td>27.21</td><td>0.214</td><td>734MB</td><td>0.841</td><td>23.14</td><td>0.183</td><td>411MB</td><td>0.903</td><td>29.41</td><td>0.743</td><td>676MB</td></tr>
-              <tr><td>Pixel-GS* [16]</td><td>0.822</td><td>27.67</td><td>0.193</td><td>1.2GB</td><td>0.853</td><td>23.74</td><td>0.150</td><td>1.05GB</td><td>0.896</td><td>28.91</td><td>0.248</td><td>1.1GB</td></tr>
-              <tr><td>AbsGS-0004 [5]</td><td>0.802</td><td>27.49</td><td>0.191</td><td>328MB</td><td>0.853</td><td>23.73</td><td>0.162</td><td>304MB</td><td>0.902</td><td>29.67</td><td>0.256</td><td>444MB</td></tr>
-              <tr><td>AbsGS-0008 [5]</td><td>0.815</td><td>27.41</td><td>0.211</td><td>450MB</td><td>0.844</td><td>23.54</td><td>0.183</td><td>202MB</td><td>0.903</td><td>29.69</td><td>0.241</td><td>380MB</td></tr>
-              <tr class="has-background-success-light"><td><strong>GDAGS (Ours)</strong></td><td><strong>0.821</strong></td><td>27.35</td><td><strong>0.199</strong></td><td>515MB</td><td>0.847</td><td>23.55</td><td><strong>0.176</strong></td><td>226MB</td><td><strong>0.905</strong></td><td><strong>29.70</strong></td><td><strong>0.235</strong></td><td>388MB</td></tr>
+              <tr><td>Plenoxels</td><td>0.626</td><td>23.08</td><td>0.463</td><td>2.1GB</td><td>0.719</td><td>21.08</td><td>0.379</td><td>2.3GB</td><td>0.795</td><td>23.06</td><td>0.510</td><td>2.7GB</td></tr>
+              <tr><td>INGP</td><td>0.671</td><td>25.30</td><td>0.371</td><td>13MB</td><td>0.723</td><td>21.72</td><td>0.330</td><td>13MB</td><td>0.797</td><td>26.42</td><td>0.423</td><td>13MB</td></tr>
+              <tr><td>Mip-NeRF360</td><td>0.792</td><td>27.69</td><td>0.237</td><td>85MB</td><td>0.759</td><td>22.22</td><td>0.257</td><td>85MB</td><td>0.901</td><td>29.40</td><td>0.425</td><td>85MB</td></tr>
+              <tr><td>3DGS</td><td>0.815</td><td>27.21</td><td>0.214</td><td>734MB</td><td>0.841</td><td>23.14</td><td>0.183</td><td>411MB</td><td>0.903</td><td>29.41</td><td>0.743</td><td>676MB</td></tr>
+              <tr><td>Pixel-GS</td><td>0.832</td><td>27.72</td><td>0.178</td><td>1.2GB</td><td>0.853</td><td>23.74</td><td>0.150</td><td>1.05GB</td><td>0.896</td><td>28.91</td><td>0.248</td><td>1.1GB</td></tr>
+              <tr><td>AbsGS-0004</td><td>0.802</td><td>27.49</td><td>0.191</td><td>328MB</td><td>0.853</td><td>23.73</td><td>0.162</td><td>304MB</td><td>0.902</td><td>29.67</td><td>0.256</td><td>444MB</td></tr>
+              <tr><td>AbsGS-0008</td><td>0.815</td><td>27.41</td><td>0.211</td><td>450MB</td><td>0.844</td><td>23.54</td><td>0.183</td><td>202MB</td><td>0.903</td><td>29.69</td><td>0.241</td><td>380MB</td></tr>
+              <tr class="has-background-success-light"><td><strong>GDAGS (Ours)</strong></td><td><strong>0.839</strong></td><td>28.02</td><td><strong>0.145</strong></td><td>515MB</td><td>0.847</td><td>23.55</td><td><strong>0.176</strong></td><td>226MB</td><td><strong>0.905</strong></td><td><strong>29.70</strong></td><td><strong>0.235</strong></td><td>388MB</td></tr>
             </tbody>
           </table>
           <p class="has-text-centered">
-            Table 1: Quantitative comparison on three datasets. SSIM↑ and PSNR↑ are higher-the-better; LPIPS↓ is lower-the-better.
+            Quantitative comparison on three datasets. SSIM↑ and PSNR↑ are higher-the-better; LPIPS↓ is lower-the-better.
           </p>
         </div>
 
@@ -344,7 +344,7 @@
                class="interpolation-image"
                alt="Qualitative comparison"/>
           <p>
-            Figure 3: Qualitative comparisons of different methods on scenes from Mip-NeRF360, Tanks&Temples and Deep Blending datasets.
+            Qualitative comparisons of different methods on scenes from Mip-NeRF360, Tanks&Temples and Deep Blending datasets.
           </p>
         </div>
 
@@ -372,13 +372,14 @@
             </thead>
             <tbody>
               <tr><td>3DGS</td><td>0.815</td><td>27.21</td><td>0.214</td><td>744MB</td><td>0.841</td><td>23.14</td><td>0.183</td><td>411MB</td><td>0.904</td><td>29.41</td><td>0.243</td><td>676MB</td></tr>
+              <tr><td>GDAGS-L</td><td>0.814</td><td>27.55</td><td>0.248</td><td>713MB</td><td>0.849</td><td>23.74</td><td>0.179</td><td>321MB</td><td>0.893</td><td>29.62</td><td>0.241</td><td>397MB</td></tr>
               <tr><td>GDAGS-S</td><td>0.819</td><td>27.52</td><td>0.240</td><td>441MB</td><td>0.846</td><td>23.54</td><td>0.178</td><td>195MB</td><td>0.905</td><td>29.67</td><td>0.238</td><td>328MB</td></tr>
               <tr><td>GDAGS-C</td><td>0.812</td><td>27.46</td><td>0.217</td><td>615MB</td><td>0.847</td><td>23.71</td><td>0.180</td><td>305MB</td><td>0.904</td><td>29.70</td><td>0.240</td><td>452MB</td></tr>
-              <tr class="has-background-success-light"><td><strong>GDAGS (Ours)</strong></td><td><strong>0.821</strong></td><td><strong>27.55</strong></td><td><strong>0.199</strong></td><td>515MB</td><td><strong>0.847</strong></td><td>23.55</td><td><strong>0.176</strong></td><td>226MB</td><td><strong>0.905</strong></td><td>29.70</td><td><strong>0.235</strong></td><td>388MB</td></tr>
+              <tr class="has-background-success-light"><td><strong>GDAGS (Ours)</strong></td><td><strong>0.839</strong></td><td><strong>28.02</strong></td><td><strong>0.145</strong></td><td>515MB</td><td><strong>0.847</strong></td><td>23.55</td><td><strong>0.176</strong></td><td>226MB</td><td><strong>0.905</strong></td><td>29.70</td><td><strong>0.235</strong></td><td>388MB</td></tr>
             </tbody>
           </table>
           <p class="has-text-centered">
-            Table 2: Ablation experiment on three datasets.
+            Ablation experiment on three datasets.
           </p>
         </div>
       </div>
